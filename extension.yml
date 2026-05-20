@@ -1,0 +1,38 @@
+schema_version: "1.0"
+
+extension:
+  id: "discovery"
+  name: "Discovery (pre-spec workflow)"
+  version: "0.1.0"
+  description: "Adds a problem -> concept -> clarify -> decide -> decompose discovery workflow that runs before spec-kit's /specify, producing problem briefs, architecture concepts, ADRs and feature decompositions on isolated discovery/* branches."
+  author: "Benjamin Kuebler"
+  repository: "https://github.com/bkuebler/spec-kit-discovery"
+  license: "MIT"
+
+requires:
+  speckit_version: ">=0.1.0"
+
+provides:
+  commands:
+    - name: "speckit.discovery.problem"
+      file: "commands/problem.md"
+      description: "Capture a problem brief and bootstrap a discovery branch"
+    - name: "speckit.discovery.concept"
+      file: "commands/concept.md"
+      description: "Draft an architecture concept (context, options, sketch, open questions)"
+    - name: "speckit.discovery.clarify"
+      file: "commands/clarify.md"
+      description: "Resolve [NEEDS CLARIFICATION] markers across discovery artifacts via Q&A"
+    - name: "speckit.discovery.decide"
+      file: "commands/decide.md"
+      description: "Write an ADR locking the chosen approach; optionally promote rules to the constitution"
+    - name: "speckit.discovery.decompose"
+      file: "commands/decompose.md"
+      description: "Slice the concept into feature briefs ready for /specify"
+
+tags:
+  - "discovery"
+  - "architecture"
+  - "adr"
+  - "pre-spec"
+  - "workflow"

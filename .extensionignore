@@ -1,0 +1,8 @@
+# Files excluded from `specify extension add` installs.
+
+.git/
+.gitignore
+.github/
+.idea/
+.vscode/
+CHANGELOG.md
