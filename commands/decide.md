@@ -45,10 +45,10 @@ Produces `03-adr-MMM-<slug>.md` in the current discovery directory, where `MMM` 
 
 ```bash
 current_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
-if [[ ! "$current_branch" =~ ^discovery/[0-9]+- ]]; then
-  echo "NOT_ON_DISCOVERY_BRANCH"
-  exit 0
-fi
+case "$current_branch" in
+  discovery/[0-9]*-*) ;;
+  *) echo "NOT_ON_DISCOVERY_BRANCH"; exit 0 ;;
+esac
 suffix="${current_branch#discovery/}"
 dir=".specify/discovery/$suffix"
 echo "DISCOVERY_DIR=$dir"
