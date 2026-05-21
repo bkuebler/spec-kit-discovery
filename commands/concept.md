@@ -16,9 +16,9 @@ Produces `02-concept.md` in the current discovery directory.
 
 ## Steps
 
-1. **Locate the discovery context** with the helper below. The current branch must match `^discovery/[0-9]+-`. If not, stop and tell the user to run `/speckit.discovery.problem` first.
+1. **Locate the discovery context** by running the helper below. If `ON_DISCOVERY_BRANCH=no`, stop and tell the user to run `/speckit.discovery.problem` first. Otherwise use `DISCOVERY_DIR` as the working directory for the rest of this command.
 
-2. **Read `01-problem.md`** to ground the concept in the captured problem. If it does not exist, stop and tell the user to run `/speckit.discovery.problem`.
+2. **Read `$DISCOVERY_DIR/01-problem.md`** to ground the concept in the captured problem. If it does not exist, stop and tell the user to run `/speckit.discovery.problem`.
 
 3. **Draft `02-concept.md`** using the template below.
    - Use `$ARGUMENTS` as guidance / hints if provided.
@@ -34,14 +34,10 @@ Produces `02-concept.md` in the current discovery directory.
 ## Helper
 
 ```bash
-current_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
-echo "CURRENT_BRANCH=$current_branch"
-if [[ "$current_branch" =~ ^discovery/[0-9]+- ]]; then
-  suffix="${current_branch#discovery/}"
-  echo "DISCOVERY_DIR=.specify/discovery/$suffix"
-  ls -la ".specify/discovery/$suffix" 2>/dev/null || echo "(directory not found)"
-fi
+bash .specify/extensions/discovery/scripts/bash/discovery-context.sh
 ```
+
+Relevant keys: `ON_DISCOVERY_BRANCH`, `DISCOVERY_DIR`. If `ON_DISCOVERY_BRANCH=no`, stop and tell the user to run `/speckit.discovery.problem` first.
 
 ## Template: `02-concept.md`
 

@@ -19,20 +19,51 @@ Don't re-litigate these without an explicit user ask:
 ## Repo layout
 
 ```
-extension.yml           # manifest — 5 commands, no hooks in v0.1
+extension.yml                       # manifest — 5 commands, no hooks in v0.1
 commands/
-  problem.md            # branch+dir creation, 01-problem.md
-  concept.md            # 02-concept.md (options + recommendation)
-  clarify.md            # walks [NEEDS CLARIFICATION] markers
-  decide.md             # 03-adr-MMM-<slug>.md + opt-in promotion
-  decompose.md          # 04-features.md with /specify-ready prose
-README.md               # user-facing
+  problem.md                        # branch+dir creation, 01-problem.md
+  concept.md                        # 02-concept.md (options + recommendation)
+  clarify.md                        # walks [NEEDS CLARIFICATION] markers
+  decide.md                         # 03-adr-MMM-<slug>.md + opt-in promotion
+  decompose.md                      # 04-features.md with /specify-ready prose
+scripts/bash/
+  discovery-context.sh              # state introspection — single source of truth
+README.md                           # user-facing
 CHANGELOG.md
-LICENSE                 # MIT
-.extensionignore        # excluded from `specify extension add` installs
+LICENSE                             # MIT
+.extensionignore                    # excluded from `specify extension add` installs
 ```
 
-Each `commands/*.md` file is an AI prompt with YAML frontmatter (`description`) and a markdown body containing natural-language steps, helper bash blocks, and a template for the artifact it produces.
+Each `commands/*.md` file is an AI prompt with YAML frontmatter (`description`) and a markdown body containing natural-language steps, a call to the shared script, and a template for the artifact it produces.
+
+## Shared state script (versioned contract)
+
+`scripts/bash/discovery-context.sh` is the **single source of truth** for repo state. All commands call it via the installed path `.specify/extensions/discovery/scripts/bash/discovery-context.sh` (spec-kit copies `scripts/` to `.specify/extensions/<ext-id>/scripts/` at install time — see `extensions/git` in spec-kit core for the reference pattern).
+
+**Output protocol** (treat as a versioned contract — any rename is a breaking change for all 5 commands):
+
+Header block, always emitted:
+
+```
+CURRENT_BRANCH=<name>
+ON_DISCOVERY_BRANCH=yes|no
+WORKING_TREE_DIRTY=yes|no
+IN_GIT_REPO=yes|no
+DISCOVERY_SUFFIX=<NNN-slug>          # empty if ON_DISCOVERY_BRANCH=no
+DISCOVERY_DIR=.specify/discovery/<NNN-slug>   # empty if ON_DISCOVERY_BRANCH=no
+NEXT_NUMBER=<NNN>                    # zero-padded, ready to use for new branches
+```
+
+Three sentinel-delimited lists follow:
+```
+BEGIN_EXISTING_BRANCHES_LOCAL ... END_EXISTING_BRANCHES_LOCAL
+BEGIN_EXISTING_BRANCHES_REMOTE ... END_EXISTING_BRANCHES_REMOTE
+BEGIN_EXISTING_DIRS ... END_EXISTING_DIRS
+```
+
+Exit code is always 0 (errors are surfaced via `IN_GIT_REPO=no`, not exit status). Bash 3.2 compatible — no `[[ ! ... =~ ... ]]`, no associative arrays. **Don't reintroduce the `[[ ! ... =~ ... ]]` pattern** — it broke once due to history-expansion escaping of `!`; `case` with glob is the established workaround.
+
+Adding a new key is backward-compatible; renaming or removing one is not. Bump `CHANGELOG.md` accordingly when changing the protocol.
 
 ## Extension system primer (what you need to know)
 

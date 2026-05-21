@@ -16,7 +16,7 @@ Produces `03-adr-MMM-<slug>.md` in the current discovery directory, where `MMM` 
 
 ## Steps
 
-1. **Locate the discovery directory** with the helper below. Must be on a `discovery/*` branch. `02-concept.md` should exist; if not, warn but allow proceeding (some decisions don't need a full concept doc).
+1. **Locate the discovery directory** by running the helper below. If `ON_DISCOVERY_BRANCH=no`, stop. `02-concept.md` should exist in `DISCOVERY_DIR`; if not, warn but allow proceeding (some decisions don't need a full concept doc).
 
 2. **Determine the decision**:
    - If `$ARGUMENTS` describes the decision in prose: use it as the seed.
@@ -44,19 +44,17 @@ Produces `03-adr-MMM-<slug>.md` in the current discovery directory, where `MMM` 
 ## Helper
 
 ```bash
-current_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
-case "$current_branch" in
-  discovery/[0-9]*-*) ;;
-  *) echo "NOT_ON_DISCOVERY_BRANCH"; exit 0 ;;
-esac
-suffix="${current_branch#discovery/}"
-dir=".specify/discovery/$suffix"
-echo "DISCOVERY_DIR=$dir"
-echo "--- existing ADRs ---"
-ls -1 "$dir"/03-adr-*.md 2>/dev/null || echo "(none)"
-echo "--- constitution present ---"
-test -f .specify/memory/constitution.md && echo yes || echo no
+bash .specify/extensions/discovery/scripts/bash/discovery-context.sh
 ```
+
+If `ON_DISCOVERY_BRANCH=yes`, also gather ADR-specific state:
+
+```bash
+ls -1 "$DISCOVERY_DIR"/03-adr-*.md 2>/dev/null || echo "(no existing ADRs)"
+test -f .specify/memory/constitution.md && echo "CONSTITUTION_PRESENT=yes" || echo "CONSTITUTION_PRESENT=no"
+```
+
+(Substitute the literal value of `DISCOVERY_DIR` from the first script's output.)
 
 ## Template: `03-adr-MMM-<slug>.md`
 

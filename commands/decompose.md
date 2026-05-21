@@ -16,9 +16,9 @@ Produces `04-features.md` in the current discovery directory.
 
 ## Steps
 
-1. **Locate the discovery directory** with the helper below. Must be on a `discovery/*` branch.
+1. **Locate the discovery directory** by running the helper below. If `ON_DISCOVERY_BRANCH=no`, stop. Use `DISCOVERY_DIR` for the rest of this command.
 
-2. **Read prior artifacts**: `01-problem.md`, `02-concept.md`, and any `03-adr-*.md` files. If `02-concept.md` is missing, stop and tell the user to run `/speckit.discovery.concept` first.
+2. **Read prior artifacts in `DISCOVERY_DIR`**: `01-problem.md`, `02-concept.md`, and any `03-adr-*.md` files. If `02-concept.md` is missing, stop and tell the user to run `/speckit.discovery.concept` first.
 
 3. **Identify feature slices.** Use these heuristics:
    - Each slice should be implementable in roughly one focused work session (hours, not weeks).
@@ -38,17 +38,16 @@ Produces `04-features.md` in the current discovery directory.
 ## Helper
 
 ```bash
-current_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
-case "$current_branch" in
-  discovery/[0-9]*-*) ;;
-  *) echo "NOT_ON_DISCOVERY_BRANCH"; exit 0 ;;
-esac
-suffix="${current_branch#discovery/}"
-dir=".specify/discovery/$suffix"
-echo "DISCOVERY_DIR=$dir"
-echo "--- artifacts ---"
-ls -1 "$dir" 2>/dev/null
+bash .specify/extensions/discovery/scripts/bash/discovery-context.sh
 ```
+
+If `ON_DISCOVERY_BRANCH=yes`, also list the existing artifacts:
+
+```bash
+ls -1 "$DISCOVERY_DIR" 2>/dev/null
+```
+
+(Substitute the literal value of `DISCOVERY_DIR` from the first script's output.)
 
 ## Template: `04-features.md`
 

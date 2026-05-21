@@ -14,9 +14,9 @@ Walk every `[NEEDS CLARIFICATION: ...]` marker in the current discovery director
 
 ## Steps
 
-1. **Locate the discovery directory** with the helper below. Current branch must match `^discovery/[0-9]+-`. If not, stop and tell the user to start with `/speckit.discovery.problem`.
+1. **Locate the discovery directory** by running the helper below. If `ON_DISCOVERY_BRANCH=no`, stop and tell the user to start with `/speckit.discovery.problem`. Otherwise use `DISCOVERY_DIR` for the rest of this command.
 
-2. **Scan every file in the discovery directory** for `[NEEDS CLARIFICATION: ...]` markers. Build an ordered list of `(file, line, question)` tuples.
+2. **Scan every file in `DISCOVERY_DIR`** for `[NEEDS CLARIFICATION: ...]` markers. Build an ordered list of `(file, line, question)` tuples.
 
 3. **If no markers are found**, tell the user there's nothing to clarify and suggest the next command (`/speckit.discovery.decide` if `02-concept.md` exists, else `/speckit.discovery.concept`). Stop.
 
@@ -36,17 +36,16 @@ Walk every `[NEEDS CLARIFICATION: ...]` marker in the current discovery director
 ## Helper
 
 ```bash
-current_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
-case "$current_branch" in
-  discovery/[0-9]*-*) ;;
-  *) echo "NOT_ON_DISCOVERY_BRANCH"; exit 0 ;;
-esac
-suffix="${current_branch#discovery/}"
-dir=".specify/discovery/$suffix"
-echo "DISCOVERY_DIR=$dir"
-echo "--- markers ---"
-grep -RHn '\[NEEDS CLARIFICATION:' "$dir" 2>/dev/null || echo "(none)"
+bash .specify/extensions/discovery/scripts/bash/discovery-context.sh
 ```
+
+If `ON_DISCOVERY_BRANCH=yes`, also list the markers in the discovery directory:
+
+```bash
+grep -RHn '\[NEEDS CLARIFICATION:' "$DISCOVERY_DIR" 2>/dev/null || echo "(none)"
+```
+
+(Substitute the literal value of `DISCOVERY_DIR` from the first script's output.)
 
 ## Notes
 
