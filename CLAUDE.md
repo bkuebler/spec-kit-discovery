@@ -103,7 +103,22 @@ In rough priority order:
 5. Inspect `.specify/discovery/NNN-<slug>/` artifacts.
 6. To re-test cleanly: `specify extension remove discovery`, then re-add.
 
-After significant changes, bump `extension.version` and `CHANGELOG.md` together — they should never drift.
+After significant changes, bump `extension.version`, add a `CHANGELOG.md` entry, **and create an annotated git tag `vX.Y.Z`** — all in the same shell session. These three never drift apart:
+
+```bash
+# in the commit that bumps the version + adds the CHANGELOG entry:
+git commit -m "Bump version to X.Y.Z and ..."
+git tag -a vX.Y.Z -m "vX.Y.Z - <one-line summary>
+
+<short release notes — mirror the CHANGELOG entry's headline>"
+```
+
+Use **annotated** tags (`-a -m`), not lightweight, so each release carries a message, author, and date. Tags do not push automatically — `git push --tags` (or `git push origin vX.Y.Z`) is needed once a remote exists.
+
+Semver bump rules for this extension:
+- **Patch** (`0.1.0 → 0.1.1`): bash fixes, doc tweaks, internal refactors with stable command surface.
+- **Minor** (`0.1.0 → 0.2.0`): new commands, new hooks, new artifact fields.
+- **Major** (`0.x → 1.0`): renaming a command, breaking the script output protocol, changing branch naming.
 
 ## Git conventions for this repo
 
