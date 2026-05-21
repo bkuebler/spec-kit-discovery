@@ -23,13 +23,16 @@ Spec-kit core gives you a per-feature pipeline: `/constitution` → `/specify` �
 │   /speckit.discovery.problem    <free-text problem description>          │
 │        └→ 01-problem.md                                                  │
 │   /speckit.discovery.concept                                             │
-│        └→ 02-concept.md  (context, options, sketch, open questions)      │
-│   /speckit.discovery.clarify                                             │
-│        └→ resolves [NEEDS CLARIFICATION] markers via Q&A                 │
+│        └→ 02-concept.md  (context, options, sketch, open questions)     │
 │   /speckit.discovery.decide                                              │
 │        └→ 03-adr-MMM-<slug>.md  (+ opt-in promotion to constitution)     │
 │   /speckit.discovery.decompose                                           │
 │        └→ 04-features.md  (one feature slice per /specify run)           │
+│                                                                          │
+│   /speckit.discovery.clarify    (iterative — run after any of the        │
+│                                  commands above to resolve any           │
+│                                  [NEEDS CLARIFICATION] markers           │
+│                                  accumulated across the discovery dir)   │
 │                                                                          │
 │   merge  discovery/NNN-<slug>  →  main                                   │
 └────────┬─────────────────────────────────────────────────────────────────┘

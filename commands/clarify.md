@@ -18,7 +18,7 @@ Walk every `[NEEDS CLARIFICATION: ...]` marker in the current discovery director
 
 2. **Scan every file in `DISCOVERY_DIR`** for `[NEEDS CLARIFICATION: ...]` markers. Build an ordered list of `(file, line, question)` tuples.
 
-3. **If no markers are found**, tell the user there's nothing to clarify and suggest the next command (`/speckit.discovery.decide` if `02-concept.md` exists, else `/speckit.discovery.concept`). Stop.
+3. **If no markers are found**, tell the user the discovery directory is clean (no outstanding `[NEEDS CLARIFICATION]` markers). List the artifacts present in `DISCOVERY_DIR` so the user can decide their next step, but do **not** prescribe one — `clarify` is an iterative tool, not a workflow stage, and the user may have just finished any of `problem`, `concept`, `decide`, or `decompose`. Stop.
 
 4. **If `$ARGUMENTS` names a specific file** (e.g. `02-concept.md`) or a specific question fragment, narrow the list accordingly.
 

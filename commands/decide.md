@@ -39,7 +39,7 @@ Produces `03-adr-MMM-<slug>.md` in the current discovery directory, where `MMM` 
      - Append (don't replace) to `.specify/memory/constitution.md` under a section heading `## Decisions promoted from ADRs` (create the section if absent). Each bullet ends with `(see <path-to-adr-file>)`.
      - If `.specify/memory/constitution.md` doesn't exist, tell the user and offer to create it with just this section.
 
-7. **Report to the user**: ADR path, whether constitution was updated (and which file), suggested next command (`/speckit.discovery.decompose`).
+7. **Report to the user**: ADR path, whether constitution was updated (and which file), and the count of `[NEEDS CLARIFICATION]` markers in the ADR (if any). Suggest `/speckit.discovery.clarify` if markers were introduced; otherwise suggest `/speckit.discovery.decompose` as the typical next step.
 
 ## Helper
 
