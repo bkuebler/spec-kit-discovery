@@ -4,6 +4,18 @@ All notable changes to this extension are documented here. Format roughly follow
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-05-21
+
+### Added
+- `/speckit.discovery.decompose` now offers two opt-in promotions at the end of discovery (same pattern as `decide`'s constitution prompt — both default to N):
+  - **ADR promotion to `docs/adr/`**: copies each `03-adr-MMM-<slug>.md` to `docs/adr/NNNN-<slug>.md` with a project-wide 4-digit counter, rewrites the heading to match, and appends a back-link footer to the discovery original. Working copies in `.specify/discovery/` are untouched.
+  - **Management summary generation**: drafts `05-management-summary.md` in the discovery directory by synthesizing problem + options table + decision + costs + plan from existing artifacts — no re-analysis or re-estimation. A second prompt optionally copies it to `docs/management-summaries/NNN-<discovery-slug>.md` for sharing outside the repo.
+- `/speckit.discovery.decompose` template now includes a **Cost rollup** section restating the ADR's chosen-option totals plus a per-slice effort-share table (percentages, not re-estimated dollars; must sum to 100%) and an optional **Descope scenarios** block for "what if we ship less?" questions from management.
+
+### Changed
+- `/speckit.discovery.concept` template now captures effort and cost per option, not just a generic "Cost" bullet. Candidate approaches are rendered as a comparison table with **effort (build)**, **build cost**, **run cost**, **risk**, **reversibility**, and **confidence** columns; a new **Estimation assumptions** section captures the inputs (team/capacity, blended rate, infra unit costs, time horizon) the figures depend on. Recommendation guidance updated to explicitly weigh effort/cost against risk and reversibility.
+- `/speckit.discovery.decide` ADR template now carries effort/cost forward as a first-class **Cost & effort** section for the chosen option (effort, build cost, run cost, confidence, estimation assumptions). **Alternatives considered** entries now also carry a brief effort/cost one-liner so the rejected trade is legible in retrospect. The `Consequences > Negative / costs` bullet is reframed for non-monetary downsides only. When the concept lacks these figures, the ADR marks them as `[NEEDS CLARIFICATION: ...]` rather than inventing numbers.
+
 ## [0.1.3] - 2026-05-21
 
 ### Changed
@@ -44,7 +56,8 @@ All notable changes to this extension are documented here. Format roughly follow
 - No `before_specify` hook yet — workflow ordering is by convention. Planned for v0.2.
 - Bash-only helpers; PowerShell parity not yet implemented.
 
-[Unreleased]: https://github.com/bkuebler/spec-kit-discovery/compare/v0.1.3...HEAD
+[Unreleased]: https://github.com/bkuebler/spec-kit-discovery/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/bkuebler/spec-kit-discovery/compare/v0.1.3...v0.2.0
 [0.1.3]: https://github.com/bkuebler/spec-kit-discovery/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/bkuebler/spec-kit-discovery/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/bkuebler/spec-kit-discovery/compare/v0.1.0...v0.1.1

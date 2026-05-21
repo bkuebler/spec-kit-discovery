@@ -25,7 +25,7 @@ commands/
   concept.md                        # 02-concept.md (options + recommendation)
   clarify.md                        # walks [NEEDS CLARIFICATION] markers
   decide.md                         # 03-adr-MMM-<slug>.md + opt-in promotion
-  decompose.md                      # 04-features.md with /specify-ready prose
+  decompose.md                      # 04-features.md with /specify-ready prose; opt-in 05-management-summary.md, opt-in promotion of ADRs → docs/adr/ and summary → docs/management-summaries/
 scripts/bash/
   discovery-context.sh              # state introspection — single source of truth
 README.md                           # user-facing
@@ -79,7 +79,8 @@ Adding a new key is backward-compatible; renaming or removing one is not. Bump `
 ## Conventions to preserve
 
 - **Marker format**: `[NEEDS CLARIFICATION: <specific question>]` — case-sensitive, brackets included. Don't paraphrase. `clarify.md` greps for this exact substring.
-- **Filenames in discovery dirs**: `01-problem.md`, `02-concept.md`, `03-adr-MMM-<slug>.md`, `04-features.md`. `MMM` is per-discovery (multiple ADRs allowed); `NNN` is per-project (one per discovery).
+- **Filenames in discovery dirs**: `01-problem.md`, `02-concept.md`, `03-adr-MMM-<slug>.md`, `04-features.md`, optionally `05-management-summary.md`. `MMM` is per-discovery (multiple ADRs allowed); `NNN` is per-project (one per discovery).
+- **Durable promotion targets** (consumer project, populated opt-in by `decompose`): `docs/adr/NNNN-<slug>.md` uses a project-wide 4-digit ADR counter independent of `MMM`; `docs/management-summaries/NNN-<discovery-slug>.md` mirrors the discovery number (one summary per discovery). Promoted ADRs have their heading rewritten to match the new `NNNN` and a back-link footer to the discovery original.
 - **Bash helpers** in command bodies should be defensive (`2>/dev/null || true` where appropriate) — the consumer project's git state isn't ours to assume.
 - **Idempotency**: `problem.md` reuses the current branch when invoked while already on a `discovery/*` branch. Other commands operate on whatever discovery branch is currently checked out.
 
@@ -93,7 +94,7 @@ In rough priority order:
 4. **Constitution promotion has no dedup** — running `decide` on related ADRs can append similar rules. Document a review step or add fuzzy-match dedup.
 5. **No tests yet.** The dev guide shows a pytest example using `specify_cli.extensions.ExtensionManifest`. Add a smoke test that loads `extension.yml` and asserts every `commands/*.md` referenced exists.
 6. **Catalog submission** — see `extensions/EXTENSION-PUBLISHING-GUIDE.md` for the community-catalog flow when v0.1 is battle-tested.
-7. **ADR promotion to `docs/adr/`** — discovery artifacts currently all live under `.specify/discovery/NNN-<slug>/`, which is right for active/working state but hides durable design records from non-spec-kit readers. Consider having `decompose` (or a new `promote` step) copy `03-adr-MMM-<slug>.md` files to `docs/adr/` on merge, while leaving problem/concept in `.specify/` as ephemeral working docs. Aligns with the established `docs/adr/` convention.
+7. **~~ADR promotion to `docs/adr/`~~** — landed in `decompose` as an opt-in prompt (along with management-summary generation and its own opt-in promotion to `docs/management-summaries/`). Open follow-up: there is no detection of re-promotion (running `decompose` twice will copy the same ADR under two different `NNNN` numbers). If this becomes a real foot-gun, add a check that grep's `docs/adr/*.md` for the discovery's source-path footer line before assigning a new number.
 
 ## Testing changes locally
 

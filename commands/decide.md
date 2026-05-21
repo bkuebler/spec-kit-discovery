@@ -27,7 +27,7 @@ Produces `03-adr-MMM-<slug>.md` in the current discovery directory, where `MMM` 
 
 4. **Compute `MMM`** as max of existing `03-adr-*` filenames in the discovery directory, + 1, zero-padded to three digits. Start at `001`.
 
-5. **Draft `03-adr-MMM-<slug>.md`** using the template below. Pre-fill from concept + arguments; mark unknowns with `[NEEDS CLARIFICATION: ...]`.
+5. **Draft `03-adr-MMM-<slug>.md`** using the template below. Pre-fill from concept + arguments; mark unknowns with `[NEEDS CLARIFICATION: ...]`. If `02-concept.md` contains a candidate-approaches table with effort/cost figures, carry the chosen option's row into the ADR's **Cost & effort** section verbatim, and carry each rejected option's effort/cost one-liner into **Alternatives considered**. If those figures are missing from the concept, mark them as clarifications — don't invent numbers in the ADR.
 
 6. **Constitution promotion (opt-in).** After writing the ADR, ask the user **exactly once**:
    > *"Does this decision establish a **project-wide rule** that future features must respect? [y/N]"*
@@ -71,13 +71,21 @@ test -f .specify/memory/constitution.md && echo "CONSTITUTION_PRESENT=yes" || ec
 ## Decision
 <the chosen approach, stated clearly and concretely — 1 paragraph>
 
+## Cost & effort
+<Carry the chosen option's row from the concept's candidate-approaches table. If the concept didn't capture these, mark each line as [NEEDS CLARIFICATION: ...] rather than inventing numbers.>
+- **Effort (build):** <S/M/L/XL or N-M person-weeks>
+- **Build cost:** <€ range>
+- **Run cost:** <€ / month or year>
+- **Confidence:** <low / med / high>
+- **Estimation assumptions:** <inline the key inputs the figures depend on (team size, blended rate, infra unit costs, time horizon), or reference `02-concept.md`'s Estimation assumptions section if unchanged>
+
 ## Alternatives considered
-- **<Option B name>** — rejected because ...
-- **<Option C name>** — rejected because ...
+- **<Option B name>** — *effort: ..., build: €..., run: €.../mo* — rejected because ...
+- **<Option C name>** — *effort: ..., build: €..., run: €.../mo* — rejected because ...
 
 ## Consequences
 - **Positive:** ...
-- **Negative / costs:** ...
+- **Negative / costs:** <non-monetary downsides — monetary costs go in Cost & effort above>
 - **Follow-up work:** ...
 
 ## Notes

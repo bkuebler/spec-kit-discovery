@@ -67,7 +67,7 @@ Pick the version you want from the [releases page](https://github.com/bkuebler/s
 
 ```bash
 specify extension add discovery \
-  --from https://github.com/bkuebler/spec-kit-discovery/archive/refs/tags/v0.1.3.zip
+  --from https://github.com/bkuebler/spec-kit-discovery/archive/refs/tags/v0.2.0.zip
 ```
 
 Spec-kit will show a security warning (expected — the extension is not in your configured catalog) before installing.

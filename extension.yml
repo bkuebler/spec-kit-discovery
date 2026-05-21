@@ -3,7 +3,7 @@ schema_version: "1.0"
 extension:
   id: "discovery"
   name: "Discovery (pre-spec workflow)"
-  version: "0.1.3"
+  version: "0.2.0"
   description: "Pre-spec discovery: problem brief, architecture concept, ADR, and feature decomposition."
   author: "Benjamin Kuebler"
   repository: "https://github.com/bkuebler/spec-kit-discovery"
