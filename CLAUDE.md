@@ -93,6 +93,7 @@ In rough priority order:
 4. **Constitution promotion has no dedup** — running `decide` on related ADRs can append similar rules. Document a review step or add fuzzy-match dedup.
 5. **No tests yet.** The dev guide shows a pytest example using `specify_cli.extensions.ExtensionManifest`. Add a smoke test that loads `extension.yml` and asserts every `commands/*.md` referenced exists.
 6. **Catalog submission** — see `extensions/EXTENSION-PUBLISHING-GUIDE.md` for the community-catalog flow when v0.1 is battle-tested.
+7. **ADR promotion to `docs/adr/`** — discovery artifacts currently all live under `.specify/discovery/NNN-<slug>/`, which is right for active/working state but hides durable design records from non-spec-kit readers. Consider having `decompose` (or a new `promote` step) copy `03-adr-MMM-<slug>.md` files to `docs/adr/` on merge, while leaving problem/concept in `.specify/` as ephemeral working docs. Aligns with the established `docs/adr/` convention.
 
 ## Testing changes locally
 
