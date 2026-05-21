@@ -4,6 +4,12 @@ All notable changes to this extension are documented here. Format roughly follow
 
 ## [Unreleased]
 
+## [0.1.3] - 2026-05-21
+
+### Changed
+- Manifest `description` tightened to fit the publishing-guide ≤100-char guideline so the entry renders cleanly in `specify extension search`.
+- Manifest `homepage` field added (recommended by the publishing guide for catalog discoverability).
+
 ## [0.1.2] - 2026-05-21
 
 ### Changed
@@ -38,7 +44,8 @@ All notable changes to this extension are documented here. Format roughly follow
 - No `before_specify` hook yet — workflow ordering is by convention. Planned for v0.2.
 - Bash-only helpers; PowerShell parity not yet implemented.
 
-[Unreleased]: https://github.com/bkuebler/spec-kit-discovery/compare/v0.1.2...HEAD
+[Unreleased]: https://github.com/bkuebler/spec-kit-discovery/compare/v0.1.3...HEAD
+[0.1.3]: https://github.com/bkuebler/spec-kit-discovery/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/bkuebler/spec-kit-discovery/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/bkuebler/spec-kit-discovery/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/bkuebler/spec-kit-discovery/releases/tag/v0.1.0

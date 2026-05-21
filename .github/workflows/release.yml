@@ -1,0 +1,61 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Create GitHub Release from tag
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract version and changelog section
+        id: notes
+        shell: bash
+        env:
+          TAG_NAME: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          tag="$TAG_NAME"
+          version="${tag#v}"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+          # Sanity: tag must match extension.yml version
+          manifest_version=$(awk -F'"' '/^  version:/ { print $2; exit }' extension.yml)
+          if [ "$manifest_version" != "$version" ]; then
+            echo "::error::Tag $tag does not match extension.yml version $manifest_version" >&2
+            exit 1
+          fi
+
+          # Extract the CHANGELOG section for this version. Captures
+          # everything between "## [<version>]" and the next "## [" header.
+          awk -v ver="$version" '
+            $0 ~ "^## \\[" ver "\\]" { capture=1; next }
+            capture && /^## \[/ { exit }
+            capture { print }
+          ' CHANGELOG.md > release-notes.md
+
+          if ! [ -s release-notes.md ]; then
+            echo "::error::No CHANGELOG section found for $version" >&2
+            exit 1
+          fi
+
+          echo "--- release notes preview ---"
+          cat release-notes.md
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
+          body_path: release-notes.md
+          fail_on_unmatched_files: false

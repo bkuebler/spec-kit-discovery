@@ -3,10 +3,11 @@ schema_version: "1.0"
 extension:
   id: "discovery"
   name: "Discovery (pre-spec workflow)"
-  version: "0.1.2"
-  description: "Adds a problem -> concept -> clarify -> decide -> decompose discovery workflow that runs before spec-kit's /specify, producing problem briefs, architecture concepts, ADRs and feature decompositions on isolated discovery/* branches."
+  version: "0.1.3"
+  description: "Pre-spec discovery: problem brief, architecture concept, ADR, and feature decomposition."
   author: "Benjamin Kuebler"
   repository: "https://github.com/bkuebler/spec-kit-discovery"
+  homepage: "https://github.com/bkuebler/spec-kit-discovery"
   license: "MIT"
 
 requires:
