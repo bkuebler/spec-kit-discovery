@@ -4,22 +4,57 @@ A [spec-kit](https://github.com/github/spec-kit) extension that adds the **disco
 
 Spec-kit's `/specify` assumes you already know *what* problem you're solving and roughly *how*. In real projects you usually don't — you need to think through the problem, weigh approaches, and lock a direction before writing a precise feature spec. This extension fills that gap with five commands that produce durable artifacts on an isolated `discovery/*` branch.
 
-## Workflow
+## How this fits into spec-kit's workflow
+
+Spec-kit core gives you a per-feature pipeline: `/constitution` → `/specify` → `/clarify` → `/plan` → `/tasks` → `/implement`. This extension prepends a **discovery phase** that runs *once per body of work*, produces durable design artifacts, and feeds one or more feature slices into spec-kit's per-feature pipeline.
 
 ```
-/speckit.discovery.problem    <free-text problem description>
-    -> creates branch discovery/NNN-<auto-slug> and 01-problem.md
-/speckit.discovery.concept
-    -> drafts 02-concept.md (context, options, sketch, open questions)
-/speckit.discovery.clarify
-    -> walks [NEEDS CLARIFICATION] markers via Q&A
-/speckit.discovery.decide
-    -> writes 03-adr-NNN.md; offers to promote rules to constitution.md
-/speckit.discovery.decompose
-    -> writes 04-features.md, one slice per /specify run
+┌─ PROJECT SETUP (spec-kit core, once per project) ────────────────────────┐
+│   /constitution                                                          │
+│        │                                                                 │
+└────────┼─────────────────────────────────────────────────────────────────┘
+         │
+         │   (optional: /speckit.discovery.decide can later
+         │    promote rules into .specify/memory/constitution.md)
+         ▼
+┌─ DISCOVERY PHASE (this extension, once per body of work) ────────────────┐
+│   on branch  discovery/NNN-<auto-slug>                                   │
+│                                                                          │
+│   /speckit.discovery.problem    <free-text problem description>          │
+│        └→ 01-problem.md                                                  │
+│   /speckit.discovery.concept                                             │
+│        └→ 02-concept.md  (context, options, sketch, open questions)      │
+│   /speckit.discovery.clarify                                             │
+│        └→ resolves [NEEDS CLARIFICATION] markers via Q&A                 │
+│   /speckit.discovery.decide                                              │
+│        └→ 03-adr-MMM-<slug>.md  (+ opt-in promotion to constitution)     │
+│   /speckit.discovery.decompose                                           │
+│        └→ 04-features.md  (one feature slice per /specify run)           │
+│                                                                          │
+│   merge  discovery/NNN-<slug>  →  main                                   │
+└────────┬─────────────────────────────────────────────────────────────────┘
+         │
+         │   paste each feature slice's "Specify prose" block into /specify
+         ▼
+┌─ PER-FEATURE PIPELINE (spec-kit core, repeats per slice) ────────────────┐
+│   /specify  <prose from 04-features.md>                                  │
+│        └→ specs/NNN-<feature>/spec.md  (on a fresh feature branch)       │
+│   /clarify                                                               │
+│   /plan                                                                  │
+│   /tasks                                                                 │
+│   /implement                                                             │
+└──────────────────────────────────────────────────────────────────────────┘
 ```
 
-After `/speckit.discovery.decompose`, merge the discovery branch to `main` (so the concept doc and ADR live in history), then run `/specify` from `main` per feature slice.
+### Where it ties in
+
+- **Constitution.** Spec-kit's `/constitution` sets project-wide rules once. Discovery's `/speckit.discovery.decide` can later *append* rules to `.specify/memory/constitution.md` when an ADR is judged to establish a project-wide constraint. The constitution then applies to every subsequent `/specify` / `/plan` / `/implement`.
+- **Handoff to `/specify`.** `04-features.md` is the seam. Each slice contains a one-paragraph problem statement written in the imperative voice spec-kit's `/specify` expects — paste it in as the `/specify` argument from `main` (spec-kit will create its own `NNN-<feature>` branch).
+- **One discovery, N features.** A single discovery typically produces multiple feature slices that each become independent `/specify` runs. Discovery branches live separately from feature branches.
+
+### Ordering, currently
+
+At the moment ordering is **manual / by convention** — nothing prevents you from running `/specify` without a discovery, or skipping `/decompose`. A `before_specify` hook that nudges you when discovery artifacts are missing is planned for v0.2 (see [Roadmap](#roadmap)).
 
 ## Install
 
