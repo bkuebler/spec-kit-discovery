@@ -61,16 +61,40 @@ At the moment ordering is **manual / by convention** — nothing prevents you fr
 
 ## Install
 
-Local dev:
+### Recommended: from a tagged release
+
+Pick the version you want from the [releases page](https://github.com/bkuebler/spec-kit-discovery/releases) and install the source archive directly:
 
 ```bash
-specify extension add --dev /path/to/spec-kit-discovery
+specify extension add discovery \
+  --from https://github.com/bkuebler/spec-kit-discovery/archive/refs/tags/v0.1.2.zip
 ```
 
-Verify:
+Spec-kit will show a security warning (expected — the extension is not in your configured catalog) before installing.
+
+### For development on the extension itself
+
+Clone the repo and install with `--dev`, which is the install mode that supports a fast edit/reinstall loop:
 
 ```bash
-specify extension list
+git clone https://github.com/bkuebler/spec-kit-discovery.git
+specify extension add --dev ./spec-kit-discovery
+```
+
+To pick up local edits, remove and re-add:
+
+```bash
+specify extension remove discovery && specify extension add --dev ./spec-kit-discovery
+```
+
+### From a catalog (not yet available)
+
+A community-catalog submission is on the [roadmap](#roadmap). Once the entry lands, install simplifies to `specify extension add discovery`.
+
+### Verify
+
+```bash
+specify extension list   # should show "Discovery (pre-spec workflow) vX.Y.Z"
 ```
 
 ## Conventions
