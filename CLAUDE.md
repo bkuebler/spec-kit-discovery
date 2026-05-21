@@ -103,6 +103,30 @@ In rough priority order:
 5. Inspect `.specify/discovery/NNN-<slug>/` artifacts.
 6. To re-test cleanly: `specify extension remove discovery`, then re-add.
 
+## Changelog discipline (between releases)
+
+Keep `CHANGELOG.md`'s `[Unreleased]` section current as you commit, not retroactively at release time. The release procedure below assumes `[Unreleased]` already contains a faithful list of what's about to ship.
+
+**For every commit that affects what a user sees or runs:** in the same commit, add a one-line entry under `[Unreleased]` in one of the Keep a Changelog categories:
+
+- `Added` — new commands, hooks, artifacts, manifest fields, script keys.
+- `Changed` — modified behavior on the existing surface (e.g. command's report text, helper script's output, README workflow guidance the user follows).
+- `Fixed` — bugs in command behavior or script output.
+- `Deprecated` / `Removed` / `Security` — as needed.
+
+**Internal commits don't get an entry.** If a change touches only:
+
+- `CLAUDE.md` (it's for AI assistants developing the extension, not users)
+- Repo meta (`.gitignore`, `.extensionignore` patterns with no install impact)
+- Refactors that preserve every observable behavior
+- Comments / formatting
+
+…then no `[Unreleased]` line is added. The K-a-C category filter is a useful test: if a change doesn't fit Added / Changed / Fixed / Deprecated / Removed / Security, it's probably internal.
+
+**Release commit:** move every line from `[Unreleased]` into a fresh `[X.Y.Z] - YYYY-MM-DD` section above it; `[Unreleased]` becomes empty. Then perform the four-leg release procedure below.
+
+## Release procedure (the four legs)
+
 After significant changes, bump `extension.version`, add a `CHANGELOG.md` entry, create an annotated git tag `vX.Y.Z`, **and update the pinned install URL in `README.md`** — all in the same shell session. These four never drift apart:
 
 ```bash
