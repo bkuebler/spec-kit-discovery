@@ -103,7 +103,7 @@ In rough priority order:
 5. Inspect `.specify/discovery/NNN-<slug>/` artifacts.
 6. To re-test cleanly: `specify extension remove discovery`, then re-add.
 
-After significant changes, bump `extension.version`, add a `CHANGELOG.md` entry, **and create an annotated git tag `vX.Y.Z`** — all in the same shell session. These three never drift apart:
+After significant changes, bump `extension.version`, add a `CHANGELOG.md` entry, create an annotated git tag `vX.Y.Z`, **and update the pinned install URL in `README.md`** — all in the same shell session. These four never drift apart:
 
 ```bash
 # in the commit that bumps the version + adds the CHANGELOG entry:
@@ -123,6 +123,14 @@ For each new release, also append a compare-link reference at the bottom of `CHA
 ```
 
 Update the `[Unreleased]` link to compare from the new version each time.
+
+The pinned install URL in `README.md` under the "Recommended: from a tagged release" section is intentional — users see exactly which version they're installing, and silent "always latest" URLs can break in surprising ways. Update it each release. Concretely, the URL pattern is:
+
+```
+https://github.com/bkuebler/spec-kit-discovery/archive/refs/tags/vX.Y.Z.zip
+```
+
+Search-and-replace `vPREV` → `vX.Y.Z` in the README before committing the release bump.
 
 Semver bump rules for this extension:
 - **Patch** (`0.1.0 → 0.1.1`): bash fixes, doc tweaks, internal refactors with stable command surface.
