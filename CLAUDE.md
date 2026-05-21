@@ -113,7 +113,16 @@ git tag -a vX.Y.Z -m "vX.Y.Z - <one-line summary>
 <short release notes — mirror the CHANGELOG entry's headline>"
 ```
 
-Use **annotated** tags (`-a -m`), not lightweight, so each release carries a message, author, and date. Tags do not push automatically — `git push --tags` (or `git push origin vX.Y.Z`) is needed once a remote exists.
+Use **annotated** tags (`-a -m`), not lightweight, so each release carries a message, author, and date. Tags do not push automatically — `git push --tags` (or `git push origin vX.Y.Z`) is needed.
+
+For each new release, also append a compare-link reference at the bottom of `CHANGELOG.md` so the version header in the entry becomes a clickable diff link:
+
+```markdown
+[Unreleased]: https://github.com/bkuebler/spec-kit-discovery/compare/vX.Y.Z...HEAD
+[X.Y.Z]: https://github.com/bkuebler/spec-kit-discovery/compare/vPREV...vX.Y.Z
+```
+
+Update the `[Unreleased]` link to compare from the new version each time.
 
 Semver bump rules for this extension:
 - **Patch** (`0.1.0 → 0.1.1`): bash fixes, doc tweaks, internal refactors with stable command surface.

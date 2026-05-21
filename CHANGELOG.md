@@ -2,6 +2,8 @@
 
 All notable changes to this extension are documented here. Format roughly follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [SemVer](https://semver.org/).
 
+## [Unreleased]
+
 ## [0.1.1] - 2026-05-21
 
 ### Added
@@ -28,3 +30,7 @@ All notable changes to this extension are documented here. Format roughly follow
 ### Known limitations
 - No `before_specify` hook yet — workflow ordering is by convention. Planned for v0.2.
 - Bash-only helpers; PowerShell parity not yet implemented.
+
+[Unreleased]: https://github.com/bkuebler/spec-kit-discovery/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/bkuebler/spec-kit-discovery/compare/v0.1.0...v0.1.1
+[0.1.0]: https://github.com/bkuebler/spec-kit-discovery/releases/tag/v0.1.0
